@@ -4,22 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TagReplacer"
+        xmlns:tools="clr-namespace:TagReplacer.Tools"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <tools:ArrayConverter x:Key="ArrayConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Button Name="btnOpenFile" Click="BtnOpenFile_Click" Grid.Row="0">Open file</Button>
-        <ListView Name="myListView" Grid.Row="1" ItemsSource="{Binding MusicTagList}">
+        <StackPanel Grid.Row="0" Margin="4">
+            <Button Width="auto" Height="20" Margin="4"  Name="btnOpenFile" Click="BtnOpenFile_Click">Open file</Button>
+            <CheckBox Name ="CboxTitle">Title</CheckBox>
+            <CheckBox Name ="CboxAlbumArtist">AlbumArtist</CheckBox>
+            <CheckBox Name ="CboxArtists">Atrists</CheckBox>
+            <CheckBox Name ="CboxComposers">Composers</CheckBox>
+            <Label>Deliminator</Label>
+            <TextBox></TextBox>
+            <Button Name="BtnSplit" Width="auto" Height="20" Margin="4" Click="BtnSplit_Click">Split</Button>
+            <Label>Convert from</Label>
+            <TextBox></TextBox>
+            <Label>Convert to</Label>
+            <TextBox></TextBox>
+            <Button Name ="BtnConvert"  Width="auto" Height="20" Margin="4" Click="BtnConvert_Click">Convert</Button>
+        </StackPanel>
+        <ListView Name="musicsListView" Grid.Row="1" Grid.Column="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="StringData" Width="150" DisplayMemberBinding="{Binding Tag.Title}"/>
+                    <GridViewColumn Header="Title" Width="auto" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="AlbumArtist" Width="auto" DisplayMemberBinding="{Binding AlbumArtist, Converter={StaticResource ArrayConverter}}"/>
+                    <GridViewColumn Header="Artists" Width="auto" DisplayMemberBinding="{Binding Artists, Converter={StaticResource ArrayConverter}}"/>
+                    <GridViewColumn Header="Composers" Width="auto" DisplayMemberBinding="{Binding Composers, Converter={StaticResource ArrayConverter}}"/>
+                    <GridViewColumn Header="FilePath" Width="auto" DisplayMemberBinding="{Binding FilePath}"/>
                 </GridView>
             </ListView.View>
         </ListView>

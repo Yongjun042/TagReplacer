@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TagLib;
+using TagReplacer.Tools;
 
 namespace TagReplacer
 {
@@ -23,17 +25,22 @@ namespace TagReplacer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public class MusicTag
+        public class MusicInfo
         {
-            private string FilePath { get; set; }
-            private string Artist { get; set; }
-            private string Title { get; set}
+            public string Title { get; set; }
+            public string FilePath { get; set; }
+            public string[] AlbumArtist { get; set; }
+            public string[] Artists { get; set; }
+            public string[] Composers { get; set; }
         }
+        private ObservableCollection<MusicInfo> musicList;
 
 
         public MainWindow()
         {
             InitializeComponent();
+            musicList = new ObservableCollection<MusicInfo>();
+            musicsListView.ItemsSource = musicList;
 
         }
 
@@ -49,10 +56,11 @@ namespace TagReplacer
                 // Read the files
                 foreach (String file in openFileDialog.FileNames)
                 {
-                    // Create a PictureBox.
+                    //
                     try
                     {
                         var tfile = TagLib.File.Create(file);
+                        musicList.Add(item: new MusicInfo() { FilePath = file, AlbumArtist = tfile.Tag.AlbumArtists, Title = tfile.Tag.Title, Artists = tfile.Tag.Performers, Composers = tfile.Tag.Composers});
 
                     }
                     catch (SecurityException ex)
@@ -72,6 +80,20 @@ namespace TagReplacer
                     }
                 }
             }
+        }
+
+        private void BtnSplit_Click(object sender, RoutedEventArgs e)
+        {
+            
+            foreach (var item in musicsListView.SelectedItems)
+            {
+
+            }
+        }
+
+        private void BtnConvert_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
